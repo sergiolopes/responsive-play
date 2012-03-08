@@ -1,0 +1,52 @@
+#!/bin/bash
+# Params:
+#   $1 - Address (URL)
+#   $2 - From (pixels) [optional, default=320]
+#   $3 - To (pixels)   [optional, default=768]
+#   $4 - seconds       [optional, default=10]
+
+# Deal with params
+if [ "$1" = "" ]; then
+	echo Please provide an address.
+	exit 1
+else
+	address=$1
+fi
+if [ "$2" = "" ]; then
+	from=320
+else
+	from=$2
+fi
+if [ "$3" = "" ]; then
+	to=768
+else
+	to=$3
+fi
+if [ "$4" = "" ]; then
+	seconds=10
+else
+	seconds=$4
+fi
+if [ $to -lt $from ]; then
+	temp=$from
+	from=$to
+	to=$temp
+fi
+
+# Framerate
+frames=$((to - from))
+framerate=$((frames / seconds))
+
+# Script
+echo Generating a ${seconds}s movie for $address from ${from}px to ${to}px.
+
+# Remove old files
+rm -f video/*
+rm -f video.mp4
+mkdir -p video
+
+# Run screenshots
+phantomjs play.js $1 video/ $2 $3
+
+# Create video
+ffmpeg -r $framerate -b 1800 -i video/img%04d.png video.mp4
