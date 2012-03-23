@@ -28,6 +28,10 @@ page.open(address, function (status) {
     } else {
         console.log('Page opened: ' + address);
 
+        page.evaluate(function() {
+            document.body.bgColor = 'white';
+        });
+
         window.setTimeout(function () {
 
             // render current size
