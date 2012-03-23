@@ -1,0 +1,158 @@
+<html>
+	<head>
+		<title>Responsive Play - by sergiolopes</title>
+		<style type="text/css">
+			body {
+				font-family: sans-serif;
+			}
+			#toolbar {
+				
+			}
+			label {
+				color: #555;
+				font-size: 20px;
+				margin-right: 15px;
+			}
+			input {
+				border: 1px #888 solid;
+				color: #999;
+				font-size: 20px;
+				margin: 0 1px;
+				padding: 2px 4px;
+			}
+			input[name=url] {
+				width: 500px;
+			}
+			input[name=from], input[name=to], input[name=time] {
+				text-align: right;
+				width: 70px;
+			}
+
+			a, input[type=submit] {
+				background: #222;
+				color: white;
+				font-size: 22px;
+				padding: 8px;
+				text-decoration: none;
+
+			    -moz-border-radius: 0.35em;
+			    -webkit-border-radius: 0.35em;
+			    border-radius: 0.35em;
+
+			    background-image: -moz-linear-gradient(top, rgba(255,255,255,0.4), rgba(255,255,255,0.05));
+			    background-image: -o-linear-gradient(top, rgba(255,255,255,0.4), rgba(255,255,255,0.05));
+			    background-image: -ms-linear-gradient(top, rgba(255,255,255,0.4), rgba(255,255,255,0.05));
+			    background-image: -webkit-linear-gradient(top, rgba(255,255,255,0.4), rgba(255,255,255,0.05));
+			    background-image: linear-gradient(top, rgba(255,255,255,0.4), rgba(255,255,255,0.05));
+			    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.4)), to(rgba(255,255,255,0.05)));
+
+			    text-shadow: 0 -1px 1px rgba(0,0,0,0.25), -2px 0 1px rgba(0,0,0,0.25);
+
+			    -moz-box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+			    -webkit-box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+			    box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+			}
+			a#play {
+			    -moz-border-radius: 2em;
+			    -webkit-border-radius: 2em;
+			    border-radius: 2em;
+
+			    background-color: green;
+			    padding: 8px 12px;
+			    visibility: hidden;
+			}
+
+			iframe {
+				border: 1px solid black;
+				height: 100%; 
+				position: relative;
+				margin: 0 0 0 20px;
+				visibility: hidden;
+				z-index: 0;
+			}	
+			h3{
+				color: #999;
+				font-family: sans-serif;
+				font-size: 16px;
+				font-weight: normal;
+				margin-top: 0;
+				text-align: left;
+				margin: 20px 0 0 20px;
+			}		
+		</style>
+	</head>
+	<body>
+		<form id="toolbar">
+			<label> Play <input type="text" name="url" placeholder="http://" required></label>
+			<label> from <input type="number" name="from" value="320" required>px</label>
+			<label> to <input type="number" name="to" value="480" required>px</label>
+			<label> in <input type="number" name="time" value="10" required>s.</label>
+			<input type="submit" value="Open" id="open">
+			<a href="#" id="play">&#9654;</a>
+		</form>
+		
+		<h3></h3>
+		<iframe></iframe>
+
+		<script type="text/javascript">
+		(function(){
+
+			var iframe = document.querySelector('iframe');
+			var play = document.querySelector('#play');
+
+			var msg = document.querySelector('h3');
+
+			document.querySelector('form').addEventListener('submit', function(e) {
+				var url = document.querySelector('input[name=url]');
+				var from = parseInt(document.querySelector('input[name=from]').value);
+				var to = parseInt(document.querySelector('input[name=to]').value);
+
+				iframe.style.width = from;
+				iframe.style.visibility = 'visible';
+				iframe.src = url.value;
+
+				msg.innerText = (from) + 'px';
+
+				iframe.setAttribute('data-from', from);
+				iframe.setAttribute('data-to', to);
+
+				play.style.visibility = 'visible';
+
+				e.preventDefault();
+				return false;
+			});
+
+			play.addEventListener('click', function(e){
+				var from = parseInt(document.querySelector('input[name=from]').value);
+				iframe.style.width = from;
+
+				var to = parseInt(document.querySelector('input[name=to]').value);
+				var time = parseInt(document.querySelector('input[name=time]').value); // s
+
+				var interval = 50; // ms
+				var pixelVariation = to - from;
+				
+				var ratio = Math. floor((pixelVariation / (time * 1000)) * 50);
+				if (ratio == 0) ratio = 1;
+
+				setTimeout(function(){
+					var newValue = (iframe.offsetWidth - 2) + ratio;
+					if (newValue > to) {
+						newValue = to;
+					}
+					iframe.style.width = newValue;
+
+					msg.innerText = (newValue) + 'px';
+
+					if (iframe.offsetWidth - 2 < to)
+						setTimeout(arguments.callee, 50);
+				}, 50);
+
+				e.preventDefault();
+				return false;
+			});
+
+		})();
+		</script>
+	</body>
+</html>
