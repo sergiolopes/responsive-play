@@ -25,6 +25,15 @@ It's nice to create a responsive video but maybe you just want to on play on you
 
 http://sergiolopes.github.com/responsive-play/
 
+Articles
+========
+
+There's a nice Smashing Magazine article by Thierry Koblentz about true responsive designs and inifite resolutions support. You shouldn't target specific device sizes but make your design work at all possible sizes:
+
+http://coding.smashingmagazine.com/2012/03/22/device-agnostic-approach-to-responsive-web-design/
+
+responsive-play can help you nicely visualize your page at hundreds of different viewport sizes.
+
 License
 =======
 
