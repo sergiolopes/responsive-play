@@ -18,6 +18,13 @@ Requirements
 * PhantomJS
 * ffmpeg
 
+responsive-play browser edition
+===============================
+
+It's nice to create a responsive video but maybe you just want to on play on your browser. Try it:
+
+http://sergiolopes.github.com/responsive-play/
+
 License
 =======
 
