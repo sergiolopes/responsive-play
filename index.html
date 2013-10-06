@@ -104,13 +104,6 @@
 
       var params = _queryParameters(document.location.search);
 
-      if (Object.keys(params).length) {
-        if (params['url']) document.querySelector('input[name=url]').value = params['url'];
-        if (params['from']) document.querySelector('input[name=from]').value = params['from'];
-        if (params['to']) document.querySelector('input[name=to]').value = params['to'];
-        if (params['time']) document.querySelector('input[name=time]').value = params['time'];
-      }
-
 			document.querySelector('form').addEventListener('submit', function(e) {
 				var url = document.querySelector('input[name=url]');
 				var from = parseInt(document.querySelector('input[name=from]').value);
@@ -173,6 +166,19 @@
         }
 
         return params;
+      }
+
+      if (Object.keys(params).length) {
+        if (params['from']) document.querySelector('input[name=from]').value = params['from'];
+        if (params['to']) document.querySelector('input[name=to]').value = params['to'];
+        if (params['time']) document.querySelector('input[name=time]').value = params['time'];
+        if (params['url']) {
+          document.querySelector('input[name=url]').value = params['url'];
+
+          var event = document.createEvent("HTMLEvents");
+          event.initEvent("submit", true, true);
+          document.forms['toolbar'].dispatchEvent(event);
+        }
       }
 
 		})();
