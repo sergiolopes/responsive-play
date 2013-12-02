@@ -102,6 +102,8 @@
 
 			var msg = document.querySelector('h3');
 
+      var params = _queryParameters(document.location.search);
+
 			document.querySelector('form').addEventListener('submit', function(e) {
 				var url = document.querySelector('input[name=url]');
 				var from = parseInt(document.querySelector('input[name=from]').value);
@@ -151,6 +153,33 @@
 				e.preventDefault();
 				return false;
 			});
+
+      function _queryParameters(qs) {
+        qs = qs.split("+").join(" ");
+
+        var params = {},
+            tokens,
+            re = /[?&]?([^=]+)=([^&]*)/g;
+
+        while (tokens = re.exec(qs)) {
+          params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+        }
+
+        return params;
+      }
+
+      if (Object.keys(params).length) {
+        if (params['from']) document.querySelector('input[name=from]').value = params['from'];
+        if (params['to']) document.querySelector('input[name=to]').value = params['to'];
+        if (params['time']) document.querySelector('input[name=time]').value = params['time'];
+        if (params['url']) {
+          document.querySelector('input[name=url]').value = params['url'];
+
+          var event = document.createEvent("HTMLEvents");
+          event.initEvent("submit", true, true);
+          document.forms['toolbar'].dispatchEvent(event);
+        }
+      }
 
 		})();
 		</script>
